@@ -1,5 +1,4 @@
 import os
-import pandas as pd
 import boto3
 from io import StringIO
 
@@ -28,7 +27,9 @@ def readS3(
     referencepath
 ):
 
-    s3 = s3Client(prm_aws_endpoint, prm_aws_access_key_id, prm_aws_secret_access_key)
+    s3 = s3Client(prm_aws_endpoint,
+                  prm_aws_access_key_id,
+                  prm_aws_secret_access_key)
     file = os.path.basename(localpath)
     with open(localpath, 'wb') as data:
         s3.download_fileobj(prm_aws_s3_bucket, referencepath, data)
@@ -44,7 +45,9 @@ def uploadS3(
     referencepath
 ):
 
-    s3 = s3Client(prm_aws_endpoint, prm_aws_access_key_id, prm_aws_secret_access_key)
+    s3 = s3Client(prm_aws_endpoint,
+                  prm_aws_access_key_id,
+                  prm_aws_secret_access_key)
     s3.upload_file(
         Filename=localpath,
         Bucket=prm_aws_s3_bucket,
@@ -61,7 +64,9 @@ def writeS3(
     referencepath, data
 ):
 
-    s3 = s3Client(prm_aws_endpoint, prm_aws_access_key_id, prm_aws_secret_access_key)
+    s3 = s3Client(prm_aws_endpoint,
+                  prm_aws_access_key_id,
+                  prm_aws_secret_access_key)
     with StringIO() as buffer:
         data.to_csv(buffer, index=False)
         response = s3.put_object(

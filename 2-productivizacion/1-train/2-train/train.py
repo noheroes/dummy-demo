@@ -71,15 +71,15 @@ def lee_s3(config, localpath, referencepath):
         "El parametro endpoint es obligatorio."
     )
     prm_aws_s3_bucket = pl.validar_parametros(
-        cl.valor_config("s3access", "aws_s3_bucket"),
+        cl.valor_config(config, "s3access", "aws_s3_bucket"),
         "El parametro bucket es obligatorio."
     )
     prm_aws_access_key_id = pl.validar_parametros(
-        cl.valor_config("s3access", "aws_access_key_id"),
+        cl.valor_config(config, "s3access", "aws_access_key_id"),
         "El parametro access_key_id es obligatorio."
     )
     prm_aws_secret_access_key = pl.validar_parametros(
-        cl.valor_config("s3access", "aws_secret_access_key"),
+        cl.valor_config(config, "s3access", "aws_secret_access_key"),
         "El parametro secret_access_key es obligatorio."
     )
     return s3l.readS3(prm_aws_endpoint,
@@ -331,7 +331,7 @@ mse = {}
 metadata = {}
 models = [train_sklearn, train_lightgbm]
 for model in models:
-    algoritmo, model_name, hp, model, metrics = model(config, X_train, y_train, X_test, y_test)
+    algoritmo, model_name, hp, metrics = model(config, X_train, y_train, X_test, y_test)
     mse[algoritmo] = [d["numberValue"] for d in metrics["metrics"] if d["name"] == "train mse"][0]
     metadata[algoritmo] = ({"model_name": model_name, "hp": hp, "metrics": metrics})
 
@@ -343,7 +343,7 @@ hp = meta["hp"]
 metrics = meta["metrics"]
 
 print()
-print(f'algorithm selected {algoritmo_selected}')
+print(f'algorithm selected: {algoritmo_selected}')
 print()
 print(f'model: {model_name}')
 print()
@@ -356,5 +356,7 @@ print()
 mt.save_metrics(metrics)
 
 # save info in s3
-dm.main(algoritmo_selected, model_name, hp, features, X_train, X_test, metrics)
+dm.main(algoritmo_selected, model_name)
+
+# save model selected
 

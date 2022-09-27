@@ -1,3 +1,4 @@
+import os
 from os import path
 import json
 
@@ -7,7 +8,7 @@ import config_lib as cl
 import params_lib as pl
 
 
-def crea_manifiesto_modelo(config, nombre_modelo, version_modelo):
+def crea_manifiesto_modelo(config, nombre_modelo, archivo_modelo, version_modelo):
     prm_aws_endpoint = pl.validar_parametros(
         cl.valor_config(config, "s3access", "aws_endpoint"),
         "El parametro endpoint es obligatorio."
@@ -21,11 +22,11 @@ def crea_manifiesto_modelo(config, nombre_modelo, version_modelo):
         "La ruta de los modelo no puede ser nula"
     )
     ruta_manifiesto = pl.validar_parametros(
-        cl.valor_config(config, "paths", "nombre"),
+        cl.valor_config(config, "paths", "manifiesto"),
         "El nombre del manifiesto es obligatorio"
     )
     nombre_manifiesto = pl.validar_parametros(
-        cl.valor_config(config, "manifiesto", "nombre"),
+        cl.valor_config(config, "files", "manifiesto"),
         "El nombre del manifiesto es obligatorio"
     )
 
@@ -36,7 +37,7 @@ def crea_manifiesto_modelo(config, nombre_modelo, version_modelo):
             "uri": path.join(prm_aws_endpoint,
                              prm_aws_s3_bucket,
                              models_path,
-                             nombre_modelo),
+                             archivo_modelo),
             "version": version_modelo
         }
     }
@@ -50,15 +51,15 @@ def escribe_s3(config, localpath, referencepath):
         "El parametro endpoint es obligatorio."
     )
     prm_aws_s3_bucket = pl.validar_parametros(
-        cl.valor_config("s3access", "aws_s3_bucket"),
+        cl.valor_config(config, "s3access", "aws_s3_bucket"),
         "El parametro bucket es obligatorio."
     )
     prm_aws_access_key_id = pl.validar_parametros(
-        cl.valor_config("s3access", "aws_access_key_id"),
+        cl.valor_config(config, "s3access", "aws_access_key_id"),
         "El parametro access_key_id es obligatorio."
     )
     prm_aws_secret_access_key = pl.validar_parametros(
-        cl.valor_config("s3access", "aws_secret_access_key"),
+        cl.valor_config(config, "s3access", "aws_secret_access_key"),
         "El parametro secret_access_key es obligatorio."
     )
     s3l.uploadS3(prm_aws_endpoint,
@@ -67,6 +68,27 @@ def escribe_s3(config, localpath, referencepath):
                  prm_aws_s3_bucket,
                  localpath,
                  referencepath)
+
+
+def escribe_model_selected(config, nombre_modelo, version_modelo, algoritmo_selected, s3ruta_modelos):
+    ruta_archivo = pl.validar_parametros(
+        cl.valor_config(config, "paths", "model_selected"),
+        "La ruta del archivo de modelo es obligatorio."
+    )
+    nombre_archivo = pl.validar_parametros(
+        cl.valor_config(config, "files", "model_selected"),
+        "El nombre del archivo de hiperparametros es obligatorio."
+    )
+    nombre_local = path.join(ruta_archivo, nombre_archivo)
+    contenido = {
+        "model_name": nombre_modelo,
+        "model_version": version_modelo,
+        "algoritmo_selected": algoritmo_selected
+    }
+    with open(nombre_local, "w") as f:
+        f.write(json.dumps(contenido, indent = 4))
+    nombre_remoto = path.join(s3ruta_modelos, nombre_archivo)
+    escribe_s3(config, nombre_local, nombre_remoto)
 
 
 def escribe_modelo(config, algoritmo_selected, ruta_modelos, archivo_modelo):
@@ -131,7 +153,7 @@ def escribe_metrics(config, algoritmo_selected, s3ruta_modelos):
     escribe_s3(config, nombre_local, nombre_remoto)
 
 
-def main(algoritmo_selected, archivo_modelo, hiperparametros, features, metrics):
+def main(algoritmo_selected, archivo_modelo):
     config = cl.leer_config("..", "config")
     s3models_path = pl.validar_parametros(
         cl.valor_config(config, "s3paths", "models"),
@@ -152,5 +174,7 @@ def main(algoritmo_selected, archivo_modelo, hiperparametros, features, metrics)
     escribe_dataset(config, algoritmo_selected, s3models_path, 'train', train_name)
     escribe_dataset(config, algoritmo_selected, s3models_path, 'test', test_name)
     escribe_metrics(config, algoritmo_selected, s3models_path)
-
-
+    nombre_modelo = "rep"
+    version_modelo = "0.0.1"
+    escribe_model_selected(config, nombre_modelo, version_modelo, algoritmo_selected, s3models_path)
+    crea_manifiesto_modelo(config, nombre_modelo, archivo_modelo, version_modelo)

@@ -5,7 +5,9 @@
         "test": "./",
         "hyperparameters": "./",        
         "features": "./",
-        "metrics": "./"
+        "metrics": "./",
+        "manifiesto": "./",
+        "model_selected": "./"
     },
     "models": {
         "sklearn": {
@@ -25,7 +27,9 @@
         "train": "xtrain.csv",
         "test": "xtest.csv",
         "features": "selected_features.csv",
-        "metrics": "mlpipeline-metrics.json"
+        "metrics": "mlpipeline-metrics.json",
+        "manifiesto": "model-settings.json",
+        "model_selected": "model.json"
     },
     "s3access": {
         "aws_endpoint": "http://192.168.100.246",
