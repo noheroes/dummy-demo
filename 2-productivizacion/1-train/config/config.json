@@ -1,0 +1,41 @@
+{
+    "paths": {
+        "models": "./",
+        "train": "./",
+        "test": "./",
+        "hyperparameters": "./",        
+        "features": "./",
+        "metrics": "./"
+    },
+    "models": {
+        "sklearn": {
+            "name": "rep_sklearn",
+            "extension": ".pkl",
+            "version": "0.0.0",
+            "hyperparameters": "hp_skl.json"
+        },
+        "lightgbm": {
+            "name": "rep_lgbm",
+            "extension": ".pkl",
+            "version": "0.0.0",
+            "hyperparameters": "hp_lgbm.json"         
+        }
+    },
+    "files": {
+        "train": "xtrain.csv",
+        "test": "xtest.csv",
+        "features": "selected_features.csv",
+        "metrics": "mlpipeline-metrics.json"
+    },
+    "s3access": {
+        "aws_endpoint": "http://192.168.100.246",
+        "aws_s3_bucket": "storage",
+        "aws_access_key_id": "claro",
+        "aws_secret_access_key": "claro123"
+    },
+    "s3paths": {
+        "models": "models/rep",
+        "features": "features/rep/",
+        "dataset": "data/train/rep"
+    }
+}
