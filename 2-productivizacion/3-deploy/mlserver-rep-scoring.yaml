@@ -1,0 +1,16 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: dummy-demo-rep
+spec:
+  predictor:
+    minReplicas: 1
+    containers:
+      - name: mlserver-scoring
+        image: noheroes/mlserver-rep-scoring:latest
+        env:
+          - name: PROTOCOL
+            value: v2
+        ports:
+          - containerPort: 8080
+            protocol: TCP

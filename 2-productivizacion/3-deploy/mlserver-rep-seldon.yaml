@@ -1,0 +1,20 @@
+apiVersion: machinelearning.seldon.io/v1
+kind: SeldonDeployment
+metadata:
+  name: dummy-demo-rep
+spec:
+  name: dummy-demo
+  predictors:
+    - componentSpecs:
+      - spec:
+          containers:
+          - image: noheroes/mlserver-rep-scoring:latest
+            name: classifier
+      graph:
+        children: []
+        endpoint:
+          type: GRPC
+        name: classifier
+        type: MODEL
+      name: example
+      replicas: 1
