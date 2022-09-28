@@ -29,7 +29,6 @@ import files_lib as fl
 import config_lib as cl
 import params_lib as pl
 
-
 def create_metrics(
     train_mse,
     train_rmse,
@@ -274,7 +273,7 @@ def train_lightgbm(config, X_train, y_train, X_test, y_test):
                 )
 
     # create the model
-    archivo_modelo = "".join([
+    archivo_modelo = ''.join([
         pl.validar_parametros(
             cl.valor_config(config, "models", algoritmo, "name"),
             "el nombre del archivo del modelo es obligatorio."),
@@ -288,7 +287,6 @@ def train_lightgbm(config, X_train, y_train, X_test, y_test):
             "la ruta del archivo del modelo es obligatoria."),
         archivo_modelo
     )
-
     joblib.dump(lgbm_model, ruta_modelo)
 
     # ====================
@@ -331,33 +329,8 @@ def train_lightgbm(config, X_train, y_train, X_test, y_test):
     return algoritmo, archivo_modelo, hparams, metrics
 
 
-def leer_algoritmo_selected(config):
-    rutaArchivoLocal = pl.validar_parametros(
-        cl.valor_config(config, "paths", "model_selected"),
-        "La ruta del archivo del modelo seleccionado no puede ser nula"
-    )
-    rutaArchivoRemoto = pl.validar_parametros(
-        cl.valor_config(config, "s3paths", "model_selected"),
-        "La ruta del archivo del modelo seleccionado no puede ser nula"
-    )
-    nombreArchivo = pl.validar_parametros(
-        cl.valor_config(config, "files", "model_selected"),
-        "La nombre del archivo del modelo seleccionado no puede ser nula"
-    )
-    archivo_local = path.join(rutaArchivoLocal, nombreArchivo)
-    archivo_remoto = path.join(rutaArchivoRemoto, nombreArchivo)
-    archivo = lee_s3(config, archivo_local, archivo_remoto)
-    info = fl.leer_json(archivo)
-    algoritmo_selected = fl.valor_json(info, "algoritmo_selected")
-    return algoritmo_selected
-
-
 # get config info
-config = cl.leer_config(".", "config")
-
-# get selected algorithm
-algoritmo_selected = leer_algoritmo_selected(config)
-print(f'algoritmo_selected: {algoritmo_selected}')
+config = cl.leer_config("..", "config")
 
 # get train data and features
 X_train, y_train, X_test, y_test = read_prepare_dataset(config)
@@ -368,13 +341,23 @@ X_train = X_train[features]
 X_test = X_test[features]
 
 # train the models
-if algoritmo_selected == "sklearn":
-    algoritmo, model_name, hp, metrics = train_sklearn(config, X_train, y_train, X_test, y_test)
-else:
-    algoritmo, model_name, hp, metrics = train_lightgbm(config, X_train, y_train, X_test, y_test)
+mape = {}
+metadata = {}
+models = [train_sklearn, train_lightgbm]
+for model in models:
+    algoritmo, model_name, hp, metrics = model(config, X_train, y_train, X_test, y_test)
+    mape[algoritmo] = [d["numberValue"] for d in metrics["metrics"] if d["name"] == "train_mape"][0]
+    metadata[algoritmo] = ({"model_name": model_name, "hp": hp, "metrics": metrics})
+
+# choose model by min mse value
+algoritmo_selected = min(mape, key=mape.get)
+meta = metadata[algoritmo_selected]
+model_name = meta["model_name"]
+hp = meta["hp"]
+metrics = meta["metrics"]
 
 print()
-print(f'algorithm: {algoritmo}')
+print(f'algorithm selected: {algoritmo_selected}')
 print()
 print(f'model: {model_name}')
 print()
@@ -388,3 +371,4 @@ mt.save_metrics(metrics)
 
 # save info in s3
 dm.main(algoritmo_selected, model_name)
+

@@ -209,5 +209,5 @@ def inicio():
     return nombre_salida
 
 
-# if __name__ == "__main__":
-#     inicio()
+if __name__ == "__main__":
+    inicio()
