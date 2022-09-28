@@ -42,7 +42,7 @@ def uploadS3(
     prm_aws_s3_bucket,
     localpath,
     referencepath
-):
+) -> str:
 
     s3 = s3Client(prm_aws_endpoint, prm_aws_access_key_id, prm_aws_secret_access_key)
     s3.upload_file(
@@ -51,6 +51,8 @@ def uploadS3(
         Key=referencepath,
         ExtraArgs={'ACL': 'bucket-owner-full-control'}
     )
+    salida = os.path.join(prm_aws_endpoint, prm_aws_s3_bucket, referencepath)
+    return salida
 
 
 def writeS3(
