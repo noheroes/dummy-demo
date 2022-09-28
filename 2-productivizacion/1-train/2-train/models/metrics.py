@@ -2,11 +2,52 @@ import json
 from kfp.components import OutputPath, create_component_from_func
 from os import path
 
-import config_lib as cl
-import params_lib as pl
-
+import libs.config_lib as cl
+import libs.params_lib as pl
 
 metrics = {}
+
+
+def create_metrics(
+    train_mse,
+    train_rmse,
+    train_r2,
+    train_mape,
+    test_mse,
+    test_rmse,
+    test_r2,
+    test_mape,
+    average_house_price
+):
+    return {
+        "metrics": [
+            {
+                "name": "train_mse",
+                "numberValue": train_mse,
+                "format": "RAW"
+            },
+            {
+                "name": "train_rmse",
+                "numberValue": train_rmse,
+                "format": "RAW"
+            },
+            {
+                "name": "train_r2",
+                "numberValue": train_r2,
+                "format": "RAW"
+            },
+            {
+                "name": "train_mape",
+                "numberValue": train_mape,
+                "format": "RAW"
+            },
+            {
+                "name": "average_house_price",
+                "numberValue": average_house_price,
+                "format": "RAW"
+            }
+        ]
+    }
 
 
 def save_metrics(metrics):

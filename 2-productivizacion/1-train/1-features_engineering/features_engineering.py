@@ -1,17 +1,20 @@
-import argparse
-import os
-from pathlib import Path
-import pickle
-
+# import libraries
 import pandas as pd
 import numpy as np
 
-# for plotting
-
+# utils
+import s3_lib as s3l
+import save_model as dm
+import files_lib as fl
+import config_lib as cl
+import params_lib as pl
 
 # to build the models
 from sklearn.linear_model import Lasso
 from sklearn.feature_selection import SelectFromModel
+
+
+
 
 # to visualise al the columns in the dataframe
 pd.pandas.set_option('display.max_columns', None)
@@ -51,7 +54,7 @@ print('selected features: {}'.format(len(selected_feats)))
 print('features with coefficients shrank to zero: {}'.format(
     np.sum(sel_.estimator_.coef_ == 0)))
 
-
+# save features
 print(selected_feats)
 selected_feats = X_train.columns[(sel_.estimator_.coef_ != 0).ravel().tolist()]
 pd.Series(selected_feats).to_csv('./selected_features.csv', index=False)
