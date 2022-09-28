@@ -14,7 +14,7 @@ import joblib
 from sklearn.linear_model import Lasso
 
 # to evaluate the model
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_percentage_error
 from math import sqrt
 
 import lightgbm as lgbm
@@ -29,35 +29,41 @@ import files_lib as fl
 import config_lib as cl
 import params_lib as pl
 
-
 def create_metrics(
     train_mse,
     train_rmse,
     train_r2,
+    train_mape,
     test_mse,
     test_rmse,
     test_r2,
+    test_mape,
     average_house_price
 ):
     return {
         "metrics": [
             {
-                "name": "train mse",
+                "name": "train_mse",
                 "numberValue": train_mse,
                 "format": "RAW"
             },
             {
-                "name": "train rmse",
+                "name": "train_rmse",
                 "numberValue": train_rmse,
                 "format": "RAW"
             },
             {
-                "name": "train r2",
+                "name": "train_r2",
                 "numberValue": train_r2,
                 "format": "RAW"
             },
             {
-                "name": "average house price",
+                "name": "train_mape",
+                "numberValue": train_mape,
+                "format": "RAW"
+            },
+            {
+                "name": "average_house_price",
                 "numberValue": average_house_price,
                 "format": "RAW"
             }
@@ -203,6 +209,8 @@ def train_sklearn(config, X_train, y_train, X_test, y_test):
     print('train rmse: {}'.format(trrmse))
     trr2 = r2_score(np.exp(y_train), np.exp(pred))
     print('train r2: {}'.format(trr2))
+    trmape = mean_absolute_percentage_error(y_train, pred)
+    print('train mape: {}'.format(trmape))
     print()
 
     # determine mse and rmse of test
@@ -214,6 +222,8 @@ def train_sklearn(config, X_train, y_train, X_test, y_test):
     print('test rmse: {}'.format(termse))
     ter2 = r2_score(np.exp(y_test), np.exp(pred))
     print('test r2: {}'.format(ter2))
+    temape = mean_absolute_percentage_error(y_test, pred)
+    print('train mape: {}'.format(temape))
     print()
 
     # determine average house price
@@ -221,7 +231,7 @@ def train_sklearn(config, X_train, y_train, X_test, y_test):
     print('Average house price: ', ahp)
     print()
 
-    metrics = create_metrics(trmse, trrmse, trr2, temse, termse, ter2, ahp)
+    metrics = create_metrics(trmse, trrmse, trr2, trmape, temse, termse, ter2, temape, ahp)
     return algoritmo, archivo_modelo, hparams, metrics
 
 
@@ -293,6 +303,8 @@ def train_lightgbm(config, X_train, y_train, X_test, y_test):
     print('train rmse: {}'.format(trrmse))
     trr2 = r2_score(np.exp(y_train), np.exp(pred))
     print('train r2: {}'.format(trr2))
+    trmape = mean_absolute_percentage_error(y_train, pred)
+    print('train mape: {}'.format(trmape))
     print()
 
     # determine mse and rmse of test
@@ -304,6 +316,8 @@ def train_lightgbm(config, X_train, y_train, X_test, y_test):
     print('test rmse: {}'.format(termse))
     ter2 = r2_score(np.exp(y_test), np.exp(pred))
     print('test r2: {}'.format(ter2))
+    temape = mean_absolute_percentage_error(y_test, pred)
+    print('train mape: {}'.format(temape))
     print()
 
     # determine average house price
@@ -311,7 +325,7 @@ def train_lightgbm(config, X_train, y_train, X_test, y_test):
     print('Average house price: ', ahp)
     print()
 
-    metrics = create_metrics(trmse, trrmse, trr2, temse, termse, ter2, ahp)
+    metrics = create_metrics(trmse, trrmse, trr2, trmape, temse, termse, ter2, temape, ahp)
     return algoritmo, archivo_modelo, hparams, metrics
 
 
@@ -327,16 +341,16 @@ X_train = X_train[features]
 X_test = X_test[features]
 
 # train the models
-mse = {}
+mape = {}
 metadata = {}
 models = [train_sklearn, train_lightgbm]
 for model in models:
     algoritmo, model_name, hp, metrics = model(config, X_train, y_train, X_test, y_test)
-    mse[algoritmo] = [d["numberValue"] for d in metrics["metrics"] if d["name"] == "train mse"][0]
+    mape[algoritmo] = [d["numberValue"] for d in metrics["metrics"] if d["name"] == "train_mape"][0]
     metadata[algoritmo] = ({"model_name": model_name, "hp": hp, "metrics": metrics})
 
 # choose model by min mse value
-algoritmo_selected = min(mse, key=mse.get)
+algoritmo_selected = min(mape, key=mape.get)
 meta = metadata[algoritmo_selected]
 model_name = meta["model_name"]
 hp = meta["hp"]
@@ -357,6 +371,4 @@ mt.save_metrics(metrics)
 
 # save info in s3
 dm.main(algoritmo_selected, model_name)
-
-# save model selected
 
