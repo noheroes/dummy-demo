@@ -1,4 +1,3 @@
-
 FROM continuumio/miniconda3:4.10.3 AS env-builder
 SHELL ["/bin/bash", "-c"]
 
@@ -11,18 +10,15 @@ RUN conda config --add channels conda-forge && \
 # The `[]` character range will ensure that Docker doesn't complain if the
 # files don't exist:
 # https://stackoverflow.com/a/65138098/5015573
-COPY \
-    ./environment.ym[l] \
-    ./environment.yam[l] \
-    ./conda.ym[l] \
-    ./conda.yam[l] \
-    .
+
+COPY ./environment.ym[l] ./environment.yam[l] ./conda.ym[l] ./conda.yam[l] .
+
 RUN mkdir $(dirname $MLSERVER_ENV_TARBALL); \
     for envFile in environment.yml environment.yaml conda.yml conda.yaml; do \
         if [[ -f $envFile ]]; then \
-            conda env create                 --name $MLSERVER_ENV_NAME \
+            conda env create --name $MLSERVER_ENV_NAME \
                 --file $envFile; \
-            conda-pack --ignore-missing-files                 -n $MLSERVER_ENV_NAME \
+            conda-pack --ignore-missing-files -n $MLSERVER_ENV_NAME \
                 -o $MLSERVER_ENV_TARBALL; \
         fi \
     done; \
@@ -32,22 +28,13 @@ FROM seldonio/mlserver:1.1.0-slim
 SHELL ["/bin/bash", "-c"]
 
 # Copy all potential sources for custom environments
-COPY \
-    --chown=1000 \
-    --from=env-builder \
-    /envs/base.tar.g[z] \
-    ./envs/base.tar.gz
-COPY \
-    ./settings.jso[n] \
-    ./model-settings.jso[n] \
-    ./requirements.tx[t] \
-    .
+COPY --chown=1000 --from=env-builder /envs/base.tar.g[z] ./envs/base.tar.gz
+COPY ./settings.jso[n] ./model-settings.jso[n] ./requirements.tx[t] ./
 
 USER root
 # Install dependencies system-wide, to ensure that they are available for every
 # user
-RUN ./hack/build-env.sh . ./envs/base &&     chown -R 1000:0 ./envs/base && \
-    chmod -R 776 ./envs/base
+RUN ./hack/build-env.sh . ./envs/base &&     chown -R 1000:0 ./envs/base && chmod -R 776 ./envs/base
 USER 1000
 
 # Copy everything else
@@ -55,5 +42,4 @@ COPY . .
 
 # Override MLServer's own `CMD` to activate the embedded environment
 # (optionally activating the hot-loaded one as well).
-CMD source ./hack/activate-env.sh ./envs/base.tar.gz ./envs/base && \
-    mlserver start $MLSERVER_MODELS_DIR
+CMD source ./hack/activate-env.sh ./envs/base.tar.gz ./envs/base && mlserver start $MLSERVER_MODELS_DIR
