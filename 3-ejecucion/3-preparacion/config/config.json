@@ -1,2 +1,20 @@
 {
+    "paths": {
+        "raw": "./",
+        "analytic": "./"
+    },
+    "files": {
+        "raw": "dataset.csv",
+        "analytic": "dataset.csv"
+    },
+    "s3access": {
+        "aws_endpoint": "http://192.168.100.246",
+        "aws_s3_bucket": "storage",
+        "aws_access_key_id": "claro",
+        "aws_secret_access_key": "claro123"
+    },
+    "s3paths": {
+        "raw": "data/raw/rep/",
+        "analytic": "data/analytic/rep/"
+    }
 }
