@@ -6,8 +6,8 @@
         "output": "./"
     },
     "files": {
-        "predict_temp": "dataset.csv",
-        "predict": "dataset.csv",
+        "predict_temp": "predict.csv",
+        "predict": "predict.csv",
         "output": "output_rep.csv",
         "analytic": "dataset.csv"
     },
