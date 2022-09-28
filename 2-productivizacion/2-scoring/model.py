@@ -11,11 +11,10 @@ class ServingModel(MLModel):
         self.ready = True
         return self.ready
 
-    async def predict(self, payload: types.InferenceRequest) ->
-    types.InferenceResponse:
-
+    async def predict(self, payload: types.InferenceRequest) -> types.InferenceResponse:
         # input = self._extract_inputs(payload)
         prediction_path = inicio()
+        print(f'prediction_path: {prediction_path}')
         prediction_name = os.path.basename(prediction_path)
 
         return types.InferenceResponse(

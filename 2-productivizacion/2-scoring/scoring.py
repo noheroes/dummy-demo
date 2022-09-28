@@ -37,6 +37,31 @@ def lee_s3(config, localpath, referencepath):
                       referencepath)
 
 
+def escribe_s3(config, localpath, referencepath):
+    prm_aws_endpoint = pl.validar_parametros(
+        cl.valor_config(config, "s3access", "aws_endpoint"),
+        "El parametro endpoint es obligatorio."
+    )
+    prm_aws_s3_bucket = pl.validar_parametros(
+        cl.valor_config(config, "s3access", "aws_s3_bucket"),
+        "El parametro bucket es obligatorio."
+    )
+    prm_aws_access_key_id = pl.validar_parametros(
+        cl.valor_config(config, "s3access", "aws_access_key_id"),
+        "El parametro access_key_id es obligatorio."
+    )
+    prm_aws_secret_access_key = pl.validar_parametros(
+        cl.valor_config(config, "s3access", "aws_secret_access_key"),
+        "El parametro secret_access_key es obligatorio."
+    )
+    return s3l.uploadS3(prm_aws_endpoint,
+                 prm_aws_access_key_id,
+                 prm_aws_secret_access_key,
+                 prm_aws_s3_bucket,
+                 localpath,
+                 referencepath)
+
+
 def leer_algoritmo_selected(parametrosScoring):
     rutaArchivoLocal = pl.validar_parametros(
         cl.valor_config(parametrosScoring, "paths", "Ruta_Model_Selected"),
@@ -121,6 +146,9 @@ def carga_features(parametrosScoring):
     features_remoto = path.join(rutaFeaturesRemoto, nombreFeatures)
     nombreFeatures = lee_s3(parametrosScoring, features_local, features_remoto)
     df_features = pd.read_csv(nombreFeatures)
+    df_features = df_features['0'].to_list()
+    df_features = df_features + ['LotFrontage']
+
     return df_features
 
 
@@ -130,12 +158,16 @@ def scoring(df_ad, features, modelo):
     # Load model
     model = joblib.load(modelo)
     data = df_ad[features]
+    pred = df_ad
 
     # Execute model
     predict = model.predict(data, num_iteration=model.best_iteration)
-    gc.collect()
 
-    return predict
+    pred['predict'] = predict
+    pred = pred[['Id', 'predict']]
+
+    gc.collect()
+    return pd.DataFrame(data=pred, index=None)
 
 
 def guardar_salida(predict, parametrosScoring) -> str:
@@ -154,9 +186,9 @@ def guardar_salida(predict, parametrosScoring) -> str:
     )
     salida_local = path.join(rutaSalidaLocal, nombreSalida)
     salida_remoto = path.join(rutaSalidaRemoto, nombreSalida)
-
-    nombreSalida = lee_s3(parametrosScoring, salida_local, salida_remoto)
-    return nombreSalida
+    predict.to_csv(salida_local)
+    salida = escribe_s3(parametrosScoring, salida_local, salida_remoto)
+    return salida
 
 
 def inicio():
