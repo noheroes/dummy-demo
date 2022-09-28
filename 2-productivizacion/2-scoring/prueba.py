@@ -23,3 +23,4 @@ try:
 except Exception as e:
     print(e)
 
+# {'model_name': 'rep', 'model_version': '0.0.1', 'id': 'b43999b3-f633-4170-9def-05951530c5f2', 'parameters': {'content_type': None, 'headers': None}, 'outputs': [{'name': 'predict.csv', 'shape': [1], 'datatype': 'FP32', 'parameters': None, 'data': [{'prediction_path': 'http://192.168.100.246/storage/data/predict/raw/rep/predict.csv'}]}]}
