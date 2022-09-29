@@ -56,6 +56,31 @@ def escribe_s3(config, localpath, referencepath):
                  referencepath)
 
 
+def escribe_s3_Externo(config, localpath, referencepath):
+    prm_aws_endpoint = pl.validar_parametros(
+        cl.valor_config(config, "s3accessExterno", "aws_endpoint"),
+        "El parametro endpoint es obligatorio."
+    )
+    prm_aws_s3_bucket = pl.validar_parametros(
+        cl.valor_config(config, "s3accessExterno", "aws_s3_bucket"),
+        "El parametro bucket es obligatorio."
+    )
+    prm_aws_access_key_id = pl.validar_parametros(
+        cl.valor_config(config, "s3accessExterno", "aws_access_key_id"),
+        "El parametro access_key_id es obligatorio."
+    )
+    prm_aws_secret_access_key = pl.validar_parametros(
+        cl.valor_config(config, "s3accessExterno", "aws_secret_access_key"),
+        "El parametro secret_access_key es obligatorio."
+    )
+    s3l.uploadS3(prm_aws_endpoint,
+                 prm_aws_access_key_id,
+                 prm_aws_secret_access_key,
+                 prm_aws_s3_bucket,
+                 localpath,
+                 referencepath)
+
+
 def carga_dataset(config):
     print("Cargando dataset de zona analytic")
     remotepath = pl.validar_parametros(
@@ -129,7 +154,7 @@ def guardar_output(df_ad, config):
     nombre_local = path.join(localpath, archivo)
     nombre_remoto = path.join(remotepath, archivo)
     df_ad.to_csv(nombre_local, index=False)
-    escribe_s3(config, nombre_local, nombre_remoto)
+    escribe_s3_Externo(config, nombre_local, nombre_remoto)
 
 
 def inicio():
@@ -140,7 +165,6 @@ def inicio():
     df_ad = carga_dataset(config)
     # prepare dataset
     df_predict = carga_predict(config)
-    print(df_predict.head())
     # save dataset
     df_predict = prepare_salida(df_ad, df_predict)
     # save dataset
