@@ -11,10 +11,10 @@
         "log": "log.json"
     },
     "s3access": {
-        "aws_endpoint": "https://s3.us-west-1.amazonaws.com/",
-        "aws_s3_bucket": "bucketforsplitla",
-        "aws_access_key_id": "AKIAWIVEW4BNSWWEEKDL",
-        "aws_secret_access_key": "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"
+        "aws_endpoint": "http://192.168.100.246",
+        "aws_s3_bucket": "storage",
+        "aws_access_key_id": "claro",
+        "aws_secret_access_key": "claro123"
     },
     "s3paths": {
         "log": "log/rep/predict/"
