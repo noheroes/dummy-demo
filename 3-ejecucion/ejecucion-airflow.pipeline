@@ -20,10 +20,18 @@
               "kubernetes_secrets": [],
               "kubernetes_tolerations": [],
               "kubernetes_pod_annotations": [],
-              "dependencies": [],
-              "include_subdirectories": false,
+              "dependencies": [
+                "config/config.json",
+                "config_lib.py",
+                "files_lib.py",
+                "params_lib.py",
+                "s3_lib.py"
+              ],
+              "include_subdirectories": true,
               "mounted_volumes": [],
-              "runtime_image": "noheroes/kfp:latest"
+              "runtime_image": "noheroes/kfp:latest",
+              "cpu": 1,
+              "memory": 2
             },
             "label": "",
             "ui_data": {
@@ -75,10 +83,18 @@
               "kubernetes_secrets": [],
               "kubernetes_tolerations": [],
               "kubernetes_pod_annotations": [],
-              "dependencies": [],
-              "include_subdirectories": false,
+              "dependencies": [
+                "config/config.json",
+                "config_lib.py",
+                "files_lib.py",
+                "params_lib.py",
+                "s3_lib.py"
+              ],
+              "include_subdirectories": true,
               "mounted_volumes": [],
-              "runtime_image": "noheroes/kfp:latest"
+              "runtime_image": "noheroes/kfp:latest",
+              "cpu": 1,
+              "memory": 2
             },
             "label": "",
             "ui_data": {
@@ -137,10 +153,18 @@
               "kubernetes_secrets": [],
               "kubernetes_tolerations": [],
               "kubernetes_pod_annotations": [],
-              "dependencies": [],
-              "include_subdirectories": false,
+              "dependencies": [
+                "config/config.json",
+                "config_lib.py",
+                "files_lib.py",
+                "params_lib.py",
+                "s3_lib.py"
+              ],
+              "include_subdirectories": true,
               "mounted_volumes": [],
-              "runtime_image": "noheroes/kfp:latest"
+              "runtime_image": "noheroes/kfp:latest",
+              "cpu": 1,
+              "memory": 2
             },
             "label": "",
             "ui_data": {
@@ -199,10 +223,18 @@
               "kubernetes_secrets": [],
               "kubernetes_tolerations": [],
               "kubernetes_pod_annotations": [],
-              "dependencies": [],
-              "include_subdirectories": false,
+              "dependencies": [
+                "config/config.json",
+                "config_lib.py",
+                "files_lib.py",
+                "params_lib.py",
+                "s3_lib.py"
+              ],
+              "include_subdirectories": true,
               "mounted_volumes": [],
-              "runtime_image": "noheroes/kfp:latest"
+              "runtime_image": "noheroes/kfp:latest",
+              "cpu": 1,
+              "memory": 2
             },
             "label": "",
             "ui_data": {
@@ -257,8 +289,10 @@
         "version": 7,
         "runtime_type": "APACHE_AIRFLOW",
         "properties": {
+          "pipeline_defaults": {},
           "name": "ejecucion-airflow",
-          "runtime": "Apache Airflow"
+          "runtime": "Apache Airflow",
+          "cos_object_prefix": "pipelines"
         }
       },
       "runtime_ref": ""
