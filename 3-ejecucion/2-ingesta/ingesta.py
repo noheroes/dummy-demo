@@ -8,19 +8,19 @@ import params_lib as pl
 
 def lee_s3(config, localpath, referencepath):
     prm_aws_endpoint = pl.validar_parametros(
-        cl.valor_config(config, "s3access", "aws_endpoint"),
+        cl.valor_config(config, "s3accessExterno", "aws_endpoint"),
         "El parametro endpoint es obligatorio."
     )
     prm_aws_s3_bucket = pl.validar_parametros(
-        cl.valor_config(config, "s3access", "aws_s3_bucket"),
+        cl.valor_config(config, "s3accessExterno", "aws_s3_bucket"),
         "El parametro bucket es obligatorio."
     )
     prm_aws_access_key_id = pl.validar_parametros(
-        cl.valor_config(config, "s3access", "aws_access_key_id"),
+        cl.valor_config(config, "s3accessExterno", "aws_access_key_id"),
         "El parametro access_key_id es obligatorio."
     )
     prm_aws_secret_access_key = pl.validar_parametros(
-        cl.valor_config(config, "s3access", "aws_secret_access_key"),
+        cl.valor_config(config, "s3accessExterno", "aws_secret_access_key"),
         "El parametro secret_access_key es obligatorio."
     )
     return s3l.readS3(prm_aws_endpoint,
