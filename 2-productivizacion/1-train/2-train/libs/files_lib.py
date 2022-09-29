@@ -13,20 +13,36 @@ def leer_json(ruta_archivo):
         try:
             archivo = json.load(f)
         except IOError as e:
-            e = ("El archivo de json no puede ser leido.")
+            e = ("El archivo json no puede ser leido.")
             raise Exception(e)
     return archivo
 
 
-def valor_json(config, param1, param2, param3=""):
+def guardar_json(ruta_archivo, data_json):
+    ruta_archivo = pl.validar_parametros(
+        ruta_archivo,
+        'La ruta del archivo es obligatoria.')
+
+    with open(ruta_archivo, 'w') as f:
+        try:
+            f.write(json.dumps(data_json))
+        except IOError as e:
+            e = ("El archivo json no puede ser grabado.")
+            raise Exception(e)
+
+
+def valor_json(config, param1, param2="", param3=""):
     config = pl.validar_parametros(config, "El contenido del archivo es obligatorio.")
     param1 = pl.validar_parametros(param1, "El parámetro 1 es obligatorio.")
-    param2 = pl.validar_parametros(param2, "El parámetro 2 es obligatorio.")
+    #param2 = pl.validar_parametros(param2, "El parámetro 2 es obligatorio.")
     try:
         if param3 != "":
-            valor = config[param1][param2][param3]
+            temp = config[param1][param2]
+            valor = temp[param3]
+        elif param2 != "":
+            valor = config[param1][param2]            
         else:
-            valor = config[param1][param2]
+            valor = config[param1]
     except Exception as e:
         e = ("El argumento no es el correcto")
         raise Exception(e)

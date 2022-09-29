@@ -1,5 +1,5 @@
-import params_lib as pl
-import files_lib as fl
+import libs.params_lib as pl
+import libs.files_lib as fl
 
 
 def leer_config(config_path, config_name):

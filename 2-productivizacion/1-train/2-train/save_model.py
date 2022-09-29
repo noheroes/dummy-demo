@@ -128,7 +128,7 @@ def escribe_metrics(config, algoritmo_selected, s3ruta_modelos):
 
 
 def main(algoritmo_selected, archivo_modelo):
-    config = cl.leer_config("..", "config")
+    config = cl.leer_config(".", "config")
     s3models_path = pl.validar_parametros(
         cl.valor_config(config, "s3paths", "models"),
         "La ruta de los modelos es obligatoria"

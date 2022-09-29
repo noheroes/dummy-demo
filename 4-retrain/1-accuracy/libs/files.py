@@ -20,4 +20,4 @@ def leer_json(ruta_archivo):
 
 
 def guardar_json(ruta_archivo, data_json):
-    return fl.guardar_json(ruta_archivo, data_json)
+    return fl.guarda_json(ruta_archivo, data_json)

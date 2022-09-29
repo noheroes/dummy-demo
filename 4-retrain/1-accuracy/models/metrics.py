@@ -60,15 +60,15 @@ def save_metrics(config, metrics):
     f1.guardar_json(nombre_archivo, metrics)
 
 
-def read_metrics(config):
+def read_metrics(config, algoritmo_selected):
     remotepath = f1.obtener_ruta(config, "s3paths", "metrics",
-            "la ruta remota para los features es obligatoria.")
+            "la ruta remota para las metricas es obligatoria.")
     localpath = f1.obtener_ruta(config, "paths", "metrics",
-            "la ruta local para los features es obligatoria.")
+            "la ruta local para las metricas es obligatoria.")
     metrics = f1.obtener_ruta(config, "files", "metrics",
-            "el nombre del archivo de features es obligatorio")
+            "el nombre del archivo de metricas es obligatorio")
     nombre_local = path.join(localpath, metrics)
-    nombre_remoto = path.join(remotepath, metrics)
+    nombre_remoto = path.join(remotepath, algoritmo_selected, metrics)
     nombre_archivo = s3.lee_s3(config, nombre_local, nombre_remoto)
     return f1.leer_json(nombre_archivo)
 

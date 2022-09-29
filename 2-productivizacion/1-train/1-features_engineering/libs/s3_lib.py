@@ -2,9 +2,6 @@ import os
 import boto3
 from io import StringIO
 
-import config_lib as cl
-import params_lib as pl
-
 
 def s3Client(
     prm_aws_endpoint,
@@ -76,29 +73,3 @@ def writeS3(
             Bucket=prm_aws_s3_bucket, Key=referencepath, Body=buffer.getvalue()
         )
     return response
-
-
-def lee_s3(config, localpath, referencepath):
-    prm_aws_endpoint = pl.validar_parametros(
-        cl.valor_config(config, "s3access", "aws_endpoint"),
-        "El parametro endpoint es obligatorio."
-    )
-    prm_aws_s3_bucket = pl.validar_parametros(
-        cl.valor_config(config, "s3access", "aws_s3_bucket"),
-        "El parametro bucket es obligatorio."
-    )
-    prm_aws_access_key_id = pl.validar_parametros(
-        cl.valor_config(config, "s3access", "aws_access_key_id"),
-        "El parametro access_key_id es obligatorio."
-    )
-    prm_aws_secret_access_key = pl.validar_parametros(
-        cl.valor_config(config, "s3access", "aws_secret_access_key"),
-        "El parametro secret_access_key es obligatorio."
-    )
-    return readS3(prm_aws_endpoint,
-                  prm_aws_access_key_id,
-                  prm_aws_secret_access_key,
-                  prm_aws_s3_bucket,
-                  localpath,
-                  referencepath)
-

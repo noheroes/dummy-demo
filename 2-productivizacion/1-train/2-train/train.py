@@ -14,7 +14,7 @@ import models.features as fe
 
 
 # get config info
-config = cl.leer_config("..", "config")
+config = cl.leer_config(".", "config")
 
 # get train data and features
 X_train, y_train, X_test, y_test = ds.read_prepare_dataset(config, 'SalePrice')
@@ -51,7 +51,7 @@ print(f'metrics: {metrics["metrics"]}')
 print()
 
 # save metrics
-mt.save_metrics(metrics)
+mt.save_metrics(config, metrics)
 
 # save info in s3
 dm.main(algoritmo_selected, model_name)

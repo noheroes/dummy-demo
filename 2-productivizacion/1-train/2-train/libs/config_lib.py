@@ -10,5 +10,6 @@ def leer_config(config_path, config_name):
     return fl.leer_json(ruta_parametros)
 
 
-def valor_config(config, param1, param2, param3=''):
-    return fl.valor_json(config, param1, param2, param3)
+def valor_config(config, param1, param2="", param3=""):
+    valor = fl.valor_json(config, param1, param2, param3) 
+    return valor
