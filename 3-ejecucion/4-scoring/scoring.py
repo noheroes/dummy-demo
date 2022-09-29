@@ -88,7 +88,7 @@ def scoring(config):
             ]
         }
     try:
-        response = requests.post(url, json=inference_request)
+        response = requests.post(url, json=inference_request).json()
         modelName = response["model_name"]
         modelVersion = response["model_version"]
         predictionPath = response["outputs"][0]["data"][0]["prediction_path"]
@@ -99,18 +99,22 @@ def scoring(config):
                }
     except Exception as e:
         print(e)
+        raise(e)
 
     return log
 
 
 def inicio():
-    # get config info
-    config = cl.leer_config(".", "config")
+    try:
+        # get config info
+        config = cl.leer_config(".", "config")
 
-    # endpoint scoring
-    log = scoring(config)
+        # endpoint scoring
+        log = scoring(config)
 
-    guardar_log(log, config)
+        guardar_log(log, config)
+    except Exception as e:
+        print(f'error: {e}')
 
 
 if __name__ == "__main__":

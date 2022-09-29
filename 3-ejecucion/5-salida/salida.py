@@ -94,7 +94,7 @@ def carga_predict(config):
 
 def prepare_salida(df_ad, df_predict):
     print("Preparando salida")
-    df_ad['Probabilidad'] = df_predict
+    df_ad['predict'] = df_predict[['predict']]
     return df_ad
 
 
@@ -140,6 +140,7 @@ def inicio():
     df_ad = carga_dataset(config)
     # prepare dataset
     df_predict = carga_predict(config)
+    print(df_predict.head())
     # save dataset
     df_predict = prepare_salida(df_ad, df_predict)
     # save dataset
