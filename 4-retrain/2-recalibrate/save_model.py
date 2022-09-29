@@ -1,11 +1,10 @@
-import os
 from os import path
 import json
 
 # utils
-import s3_lib as s3l
-import config_lib as cl
-import params_lib as pl
+import libs.s3 as s3
+import libs.config_lib as cl
+import libs.params_lib as pl
 
 
 def crea_manifiesto_modelo(config, nombre_modelo, archivo_modelo, version_modelo):
@@ -45,38 +44,13 @@ def crea_manifiesto_modelo(config, nombre_modelo, archivo_modelo, version_modelo
         json.dump(manifiesto, f)
 
 
-def escribe_s3(config, localpath, referencepath):
-    prm_aws_endpoint = pl.validar_parametros(
-        cl.valor_config(config, "s3access", "aws_endpoint"),
-        "El parametro endpoint es obligatorio."
-    )
-    prm_aws_s3_bucket = pl.validar_parametros(
-        cl.valor_config(config, "s3access", "aws_s3_bucket"),
-        "El parametro bucket es obligatorio."
-    )
-    prm_aws_access_key_id = pl.validar_parametros(
-        cl.valor_config(config, "s3access", "aws_access_key_id"),
-        "El parametro access_key_id es obligatorio."
-    )
-    prm_aws_secret_access_key = pl.validar_parametros(
-        cl.valor_config(config, "s3access", "aws_secret_access_key"),
-        "El parametro secret_access_key es obligatorio."
-    )
-    s3l.uploadS3(prm_aws_endpoint,
-                 prm_aws_access_key_id,
-                 prm_aws_secret_access_key,
-                 prm_aws_s3_bucket,
-                 localpath,
-                 referencepath)
-
-
 def escribe_model_selected(config, nombre_modelo, version_modelo, algoritmo_selected, s3ruta_modelos):
     ruta_archivo = pl.validar_parametros(
-        cl.valor_config(config, "paths", "model_selected"),
+        cl.valor_config(config, "paths", "algoritmo_selected"),
         "La ruta del archivo de modelo es obligatorio."
     )
     nombre_archivo = pl.validar_parametros(
-        cl.valor_config(config, "files", "model_selected"),
+        cl.valor_config(config, "files", "algoritmo_selected"),
         "El nombre del archivo de hiperparametros es obligatorio."
     )
     nombre_local = path.join(ruta_archivo, nombre_archivo)
@@ -88,7 +62,7 @@ def escribe_model_selected(config, nombre_modelo, version_modelo, algoritmo_sele
     with open(nombre_local, "w") as f:
         f.write(json.dumps(contenido, indent = 4))
     nombre_remoto = path.join(s3ruta_modelos, nombre_archivo)
-    escribe_s3(config, nombre_local, nombre_remoto)
+    s3.escribe_s3(config, nombre_local, nombre_remoto)
 
 
 def escribe_modelo(config, algoritmo_selected, ruta_modelos, archivo_modelo):
@@ -98,7 +72,7 @@ def escribe_modelo(config, algoritmo_selected, ruta_modelos, archivo_modelo):
     )
     nombre_local = path.join(ruta_archivo, archivo_modelo)
     nombre_remoto = path.join(ruta_modelos, algoritmo_selected, archivo_modelo)
-    escribe_s3(config, nombre_local, nombre_remoto)
+    s3.escribe_s3(config, nombre_local, nombre_remoto)
 
 
 def escribe_hiperparametros(config, algoritmo_selected, s3ruta_modelos):
@@ -112,7 +86,7 @@ def escribe_hiperparametros(config, algoritmo_selected, s3ruta_modelos):
     )
     nombre_local = path.join(ruta_archivo, nombre_archivo)
     nombre_remoto = path.join(s3ruta_modelos, algoritmo_selected, nombre_archivo)
-    escribe_s3(config, nombre_local, nombre_remoto)
+    s3.escribe_s3(config, nombre_local, nombre_remoto)
 
 
 def escribe_features(config, algoritmo_selected, s3ruta_modelos):
@@ -126,7 +100,7 @@ def escribe_features(config, algoritmo_selected, s3ruta_modelos):
     )
     nombre_local = path.join(ruta_archivo, nombre_archivo)
     nombre_remoto = path.join(s3ruta_modelos, algoritmo_selected, nombre_archivo)
-    escribe_s3(config, nombre_local, nombre_remoto)
+    s3.escribe_s3(config, nombre_local, nombre_remoto)
 
 
 def escribe_dataset(config, algoritmo_selected, s3ruta_modelos, tipo_dataset, nombre_dataset):
@@ -136,7 +110,7 @@ def escribe_dataset(config, algoritmo_selected, s3ruta_modelos, tipo_dataset, no
     )
     nombre_local = path.join(ruta_archivo, nombre_dataset)
     nombre_remoto = path.join(s3ruta_modelos, algoritmo_selected, nombre_dataset)
-    escribe_s3(config, nombre_local, nombre_remoto)
+    s3.escribe_s3(config, nombre_local, nombre_remoto)
 
 
 def escribe_metrics(config, algoritmo_selected, s3ruta_modelos):
@@ -150,11 +124,11 @@ def escribe_metrics(config, algoritmo_selected, s3ruta_modelos):
     )
     nombre_local = path.join(ruta_archivo, nombre_archivo)
     nombre_remoto = path.join(s3ruta_modelos, algoritmo_selected, nombre_archivo)
-    escribe_s3(config, nombre_local, nombre_remoto)
+    s3.escribe_s3(config, nombre_local, nombre_remoto)
 
 
 def main(algoritmo_selected, archivo_modelo):
-    config = cl.leer_config("..", "config")
+    config = cl.leer_config(".", "config")
     s3models_path = pl.validar_parametros(
         cl.valor_config(config, "s3paths", "models"),
         "La ruta de los modelos es obligatoria"

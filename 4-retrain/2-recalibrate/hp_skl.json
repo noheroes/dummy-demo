@@ -1,0 +1,6 @@
+{
+    "hparams": {
+            "alpha": 0.005,
+            "random_state": 0
+    }
+}

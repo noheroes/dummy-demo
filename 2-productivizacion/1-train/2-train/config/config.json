@@ -7,7 +7,7 @@
         "features": "./",
         "metrics": "./",
         "manifiesto": "./",
-        "algoritmo_selected": "./"
+        "model_selected": "./"
     },
     "models": {
         "sklearn": {
@@ -29,7 +29,7 @@
         "features": "selected_features.csv",
         "metrics": "mlpipeline-metrics.json",
         "manifiesto": "model-settings.json",
-        "algoritmo_selected": "model.json"
+        "model_selected": "model.json"
     },
     "s3access": {
         "aws_endpoint": "http://192.168.100.246",
@@ -40,7 +40,6 @@
     "s3paths": {
         "models": "models/rep",
         "features": "features/rep/",
-        "dataset": "data/train/rep",
-        "algoritmo_selected": "models/rep"        
+        "dataset": "data/train/rep"
     }
 }

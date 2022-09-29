@@ -1,0 +1,22 @@
+{
+    "paths": {
+        "train": "./",
+        "test": "./",
+        "features": "./"
+    },
+    "files": {
+        "train": "xtrain.csv",
+        "test": "xtest.csv",
+        "features": "selected_features.csv"
+    },
+    "s3access": {
+        "aws_endpoint": "http://192.168.100.246",
+        "aws_s3_bucket": "storage",
+        "aws_access_key_id": "claro",
+        "aws_secret_access_key": "claro123"
+    },
+    "s3paths": {
+        "features": "features/rep/",
+        "dataset": "data/train/rep"
+    }
+}
