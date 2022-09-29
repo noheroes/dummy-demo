@@ -23,7 +23,7 @@ print(f'algoritmo_selected: {algoritmo_selected}')
 
 # get train data and features
 X_train, y_train, X_test, y_test = ds.read_prepare_dataset(config, 'SalePrice')
-features = fe.read_selected_features(config)
+features = fe.read_selected_features(config, 'LotFrontage')
 
 # reduce the train and test set to the selected features
 X_train = X_train[features]
