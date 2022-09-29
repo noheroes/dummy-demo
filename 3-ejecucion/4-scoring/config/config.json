@@ -1,0 +1,22 @@
+{
+    "endpoint":{
+        "url":"http://dummy-demo-rep-example-classifier.default.svc.cluster.local:9000",
+        "modelParameter":"/v2/models/rep/versions/{modelVersion}/infer",
+        "version":"0.0.1"
+    },
+    "paths": {
+        "log": "./"
+    },
+    "files": {
+        "log": "log.json"
+    },
+    "s3access": {
+        "aws_endpoint": "https://s3.us-west-1.amazonaws.com/",
+        "aws_s3_bucket": "bucketforsplitla",
+        "aws_access_key_id": "AKIAWIVEW4BNSWWEEKDL",
+        "aws_secret_access_key": "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"
+    },
+    "s3paths": {
+        "log": "log/rep/predict/"
+    }
+}
