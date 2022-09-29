@@ -1,0 +1,159 @@
+{
+  "doc_type": "pipeline",
+  "version": "3.0",
+  "json_schema": "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json",
+  "id": "elyra-auto-generated-pipeline",
+  "primary_pipeline": "primary",
+  "pipelines": [
+    {
+      "id": "primary",
+      "nodes": [
+        {
+          "id": "da1f8dd9-eaaf-4a3b-a26a-5ed7f206b09d",
+          "type": "execution_node",
+          "op": "execute-notebook-node",
+          "app_data": {
+            "component_parameters": {
+              "filename": "Machine-Learning-Pipeline-Step3-Feature-Selection.ipynb",
+              "outputs": [
+                "selected_features.csv"
+              ],
+              "env_vars": [],
+              "kubernetes_secrets": [],
+              "kubernetes_tolerations": [],
+              "kubernetes_pod_annotations": [],
+              "dependencies": [
+                "xtest.csv",
+                "xtrain.csv"
+              ],
+              "include_subdirectories": false,
+              "mounted_volumes": [],
+              "runtime_image": "noheroes/kfp:latest",
+              "cpu": 1,
+              "memory": 2
+            },
+            "label": "",
+            "ui_data": {
+              "label": "Machine-Learning-Pipeline-Step3-Feature-Selection.ipynb",
+              "image": "/notebook/kubeflow-user-example-com/demoelyra/static/elyra/notebook.svg",
+              "x_pos": 65,
+              "y_pos": 110,
+              "description": "Run notebook file"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "90041d1f-88c4-4100-b196-2bfc22d68d0e",
+          "type": "execution_node",
+          "op": "execute-notebook-node",
+          "app_data": {
+            "component_parameters": {
+              "filename": "Machine-Learning-Pipeline-WrapUp-for-Model-Deployment.ipynb",
+              "outputs": [
+                "lasso_regression.pkl"
+              ],
+              "env_vars": [],
+              "kubernetes_secrets": [],
+              "kubernetes_tolerations": [],
+              "kubernetes_pod_annotations": [],
+              "dependencies": [
+                "houseprice.csv"
+              ],
+              "include_subdirectories": false,
+              "mounted_volumes": [],
+              "runtime_image": "noheroes/kfp:latest",
+              "cpu": 1,
+              "memory": 2
+            },
+            "label": "",
+            "ui_data": {
+              "label": "Machine-Learning-Pipeline-WrapUp-for-Model-Deployment.ipynb",
+              "image": "/notebook/kubeflow-user-example-com/demoelyra/static/elyra/notebook.svg",
+              "x_pos": 278,
+              "y_pos": 183,
+              "description": "Run notebook file"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "e7a21db9-4c91-44ab-8e10-d5c2913216e2",
+                  "node_id_ref": "da1f8dd9-eaaf-4a3b-a26a-5ed7f206b09d",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "app_data": {
+        "ui_data": {
+          "comments": []
+        },
+        "version": 7,
+        "runtime_type": "KUBEFLOW_PIPELINES",
+        "properties": {
+          "pipeline_defaults": {},
+          "name": "experimento",
+          "runtime": "Kubeflow Pipelines",
+          "cos_object_prefix": "pipelines"
+        }
+      },
+      "runtime_ref": ""
+    }
+  ],
+  "schemas": []
+}

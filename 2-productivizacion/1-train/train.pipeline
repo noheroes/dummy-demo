@@ -1,0 +1,176 @@
+{
+  "doc_type": "pipeline",
+  "version": "3.0",
+  "json_schema": "http://api.dataplatform.ibm.com/schemas/common-pipeline/pipeline-flow/pipeline-flow-v3-schema.json",
+  "id": "elyra-auto-generated-pipeline",
+  "primary_pipeline": "primary",
+  "pipelines": [
+    {
+      "id": "primary",
+      "nodes": [
+        {
+          "id": "7911524a-690b-4777-8853-af0e2a16c572",
+          "type": "execution_node",
+          "op": "execute-python-node",
+          "app_data": {
+            "component_parameters": {
+              "filename": "1-features_engineering/features_engineering.py",
+              "outputs": [
+                "selected_features.csv"
+              ],
+              "env_vars": [],
+              "kubernetes_secrets": [],
+              "kubernetes_tolerations": [],
+              "kubernetes_pod_annotations": [],
+              "dependencies": [
+                "config/config.json",
+                "libs/config_lib.py",
+                "libs/files_lib.py",
+                "libs/files.py",
+                "libs/params_lib.py",
+                "libs/s3_lib.py",
+                "libs/s3.py",
+                "models/dataset.py",
+                "models/features.py"
+              ],
+              "include_subdirectories": true,
+              "mounted_volumes": [],
+              "runtime_image": "noheroes/kfp:latest",
+              "cpu": 1,
+              "memory": 2
+            },
+            "label": "",
+            "ui_data": {
+              "label": "features_engineering.py",
+              "image": "/notebook/kubeflow-user-example-com/demoelyra/static/elyra/py-logo.svg",
+              "x_pos": 135,
+              "y_pos": 151,
+              "description": "Run Python script"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "091a43be-d731-4ebc-8c51-2a90bc2ae426",
+          "type": "execution_node",
+          "op": "execute-python-node",
+          "app_data": {
+            "component_parameters": {
+              "filename": "2-train/train.py",
+              "outputs": [],
+              "env_vars": [],
+              "kubernetes_secrets": [],
+              "kubernetes_tolerations": [],
+              "kubernetes_pod_annotations": [],
+              "dependencies": [
+                "config/config.json",
+                "libs/config_lib.py",
+                "libs/files_lib.py",
+                "libs/files.py",
+                "libs/params_lib.py",
+                "libs/s3_lib.py",
+                "libs/s3.py",
+                "models/dataset.py",
+                "models/features.py",
+                "models/lightgbm.py",
+                "models/metrics.py",
+                "models/sklearn.py",
+                "hp_lgbm.json",
+                "hp_skl.json",
+                "save_model.py"
+              ],
+              "include_subdirectories": true,
+              "mounted_volumes": [],
+              "runtime_image": "noheroes/kfp:latest"
+            },
+            "label": "",
+            "ui_data": {
+              "label": "train.py",
+              "image": "/notebook/kubeflow-user-example-com/demoelyra/static/elyra/py-logo.svg",
+              "x_pos": 370,
+              "y_pos": 295,
+              "description": "Run Python script"
+            }
+          },
+          "inputs": [
+            {
+              "id": "inPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Input Port"
+                }
+              },
+              "links": [
+                {
+                  "id": "8c8be271-b113-418c-90c4-f2268562047d",
+                  "node_id_ref": "7911524a-690b-4777-8853-af0e2a16c572",
+                  "port_id_ref": "outPort"
+                }
+              ]
+            }
+          ],
+          "outputs": [
+            {
+              "id": "outPort",
+              "app_data": {
+                "ui_data": {
+                  "cardinality": {
+                    "min": 0,
+                    "max": -1
+                  },
+                  "label": "Output Port"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "app_data": {
+        "ui_data": {
+          "comments": []
+        },
+        "version": 7,
+        "runtime_type": "KUBEFLOW_PIPELINES",
+        "properties": {
+          "pipeline_defaults": {},
+          "name": "train",
+          "runtime": "Kubeflow Pipelines",
+          "cos_object_prefix": "pipelines"
+        }
+      },
+      "runtime_ref": ""
+    }
+  ],
+  "schemas": []
+}
