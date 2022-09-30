@@ -192,8 +192,11 @@ def guardar_salida(predict, parametrosScoring) -> str:
 
 
 def convierte_dataset(data, parametrosScoring):
-    data = json.loads(data)
+    # data = json.loads(data)
     data = data["data"]
+
+    # data = json.loads(data)
+    # data = data["data"]
     print("Convirtiendo json a dataset")
     rutaArchivoLocal = pl.validar_parametros(
         cl.valor_config(parametrosScoring, "paths", "Ruta_Analytic_Data"),
