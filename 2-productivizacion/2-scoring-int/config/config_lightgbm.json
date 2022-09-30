@@ -1,0 +1,8 @@
+{
+    "name": {
+        "Name_Model": "rep_lgbm.pkl"
+    },
+    "paths": {
+        "Ruta_Model": "models/rep/lightgbm"
+    }
+}

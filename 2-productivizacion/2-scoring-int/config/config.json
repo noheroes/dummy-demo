@@ -1,0 +1,28 @@
+{
+    "name": {
+        "Name_Analytic_Data": "dataset.csv",
+        "Name_Features": "selected_features.csv",
+        "Name_PredictTemp_Data": "predict.csv",
+        "Name_Model_Selected": "model.json"
+    },
+    "paths": {
+        "ExtCSV": ".csv",
+        "Ruta_Analytic_Data": "./",
+        "Ruta_Features": "./",
+        "Ruta_PredictTemp_Data": "./",
+        "Ruta_Model_Selected": "./",
+        "Ruta_Model": "./"
+    },
+    "s3access": {
+        "aws_endpoint": "http://192.168.100.246",
+        "aws_s3_bucket": "storage",
+        "aws_access_key_id": "kubeflow",
+        "aws_secret_access_key": "kubeflow123"
+    },
+    "s3paths": {
+        "Ruta_Analytic_Data": "data/analytic/rep",
+        "Ruta_Features": "features/rep",
+        "Ruta_PredictTemp_Data": "data/predict/raw/rep",
+        "Ruta_Model_Selected": "models/rep"
+    }
+}

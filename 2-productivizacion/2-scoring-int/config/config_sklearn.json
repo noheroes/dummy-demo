@@ -1,0 +1,8 @@
+{
+    "name": {
+        "Name_Model": "rep_sklearn.pkl"
+    },
+    "paths": {
+        "Ruta_Model": "models/rep/sklearn"
+    }
+}

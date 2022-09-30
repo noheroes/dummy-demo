@@ -1,0 +1,1 @@
+{"name": "rep", "implementation": "model.ServingModel", "parameters": {"uri": "http://192.168.100.246/storage/models/rep/rep_lgbm.pkl", "version": "0.0.2"}}
