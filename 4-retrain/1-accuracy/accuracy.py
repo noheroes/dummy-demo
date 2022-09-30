@@ -1,6 +1,7 @@
 import json
 import numpy as np
 import pandas as pd
+from os import path
 from sklearn.metrics import mean_absolute_percentage_error
 
 import models.metrics as mt
@@ -8,6 +9,8 @@ import models.model as mdl
 import models.predict as prd
 import models.real as re
 import libs.config_lib as cl
+import libs.files as fl
+import libs.s3 as s3
 
 
 def leer_metrics(config, algoritmo_selected):
@@ -64,14 +67,31 @@ def evalua_metricas(mape_entrenado, mape_evaluado, ratios):
 
     if dif < ratios['recalibra']:
         accion = 0
-        print("Modelo entrenado sigue siendo adecuado")
+        descripcion = "Ok"
+        result = {"accion": accion, "descripcion": descripcion}
     elif dif < ratios['reentrena']:
         accion = 1
-        print("Acción requerida : Recalibración ")
+        descripcion = "Recalibra"
+        result = {"accion": accion, "descripcion": descripcion}
     else:
         accion = 2
+        descripcion = "Reentrenar"
         print("Acción requerida : Reentrenamiento ")
-    return accion
+        result = {"accion": accion, "descripcion": descripcion}
+    return json.dumps(result)
+
+
+def guardar_salida(config, accuracy):
+    localpath = fl.obtener_ruta(config, "paths", "accuracy", 
+                                "La ruta local del accuracy es obligatoria.")
+    remotepath = fl.obtener_ruta(config, "s3paths", "accuracy", 
+                                 "La ruta remota del accuracy es obligatoria.")
+    filename = fl.obtener_ruta(config, "files", "accuracy", 
+                               "El nombre del archivo accuracy es obligatorio.")
+    localfile = path.join(localpath, filename)
+    remotefile = path.join(remotepath, filename)
+    fl.guardar_json(localfile, accuracy)
+    s3.escribe_s3(config, localfile, remotefile)
 
 
 def main():
@@ -81,7 +101,9 @@ def main():
     mape_entrenado = leer_metrics(config, algoritmo_selected)
     mape_evaluado = obtener_metrica_evaluada(config)
     ratios = obtener_ratios(config)
-    return evalua_metricas(mape_entrenado, mape_evaluado, ratios)
+    accuracy = evalua_metricas(mape_entrenado, mape_evaluado, ratios)
+    guardar_salida(config, accuracy)
+    return accuracy
 
 
 main()
