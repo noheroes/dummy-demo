@@ -8,14 +8,16 @@
         "algoritmo_selected": "./",
         "predict": ".",
         "real": "./",
-        "accuracy": "./"
+        "accuracy": "./",
+        "metrics": "./"
     },
     "files": {
         "metrics": "mlpipeline-metrics.json",
         "algoritmo_selected": "model.json",
         "predict": "predict.csv",
         "real": "real.csv",
-        "accuracy": "accuracy.json"
+        "accuracy": "accuracy.json",
+        "metrics": "mlpipeline-metrics.json"
     },
     "s3access": {
         "aws_endpoint": "http://192.168.100.246",

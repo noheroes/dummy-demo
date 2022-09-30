@@ -92,6 +92,7 @@ def guardar_salida(config, accuracy):
     remotefile = path.join(remotepath, filename)
     fl.guardar_json(localfile, accuracy)
     s3.escribe_s3(config, localfile, remotefile)
+    mt.save_metrics(config, mt.create_metrics(accuracy))
 
 
 def main():
