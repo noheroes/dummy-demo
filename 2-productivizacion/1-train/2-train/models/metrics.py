@@ -2,8 +2,8 @@ import json
 from kfp.components import OutputPath, create_component_from_func
 from os import path
 
-import libs.s3 as s3
-import libs.files as f1
+import s3 as s3
+import files as f1
 
 metrics = {}
 

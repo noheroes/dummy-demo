@@ -1,7 +1,7 @@
 from os import path
 import pandas as pd
-import libs.s3 as s3
-import libs.files as f1
+import s3 as s3
+import files as f1
 
 
 def read_prepare_dataset(config, target):

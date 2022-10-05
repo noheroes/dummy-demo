@@ -1,0 +1,1 @@
+{"metrics": [{"name": "train_mse", "numberValue": 332591339, "format": "RAW"}, {"name": "train_rmse", "numberValue": 18237, "format": "RAW"}, {"name": "train_r2", "numberValue": 0.9467328162613842, "format": "RAW"}, {"name": "train_mape", "numberValue": 0.005482823425244311, "format": "RAW"}, {"name": "average_house_price", "numberValue": 163000, "format": "RAW"}]}

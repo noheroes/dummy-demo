@@ -2,9 +2,9 @@ from os import path
 import json
 
 # utils
-import libs.s3 as s3
-import libs.config_lib as cl
-import libs.params_lib as pl
+import s3 as s3
+import config_lib as cl
+import params_lib as pl
 
 
 def crea_manifiesto_modelo(config, nombre_modelo, archivo_modelo, version_modelo):

@@ -1,8 +1,8 @@
 import os
 import json
 import joblib
-import libs.files_lib as fl
-import libs.files as f1
+import files_lib as fl
+import files as f1
 import models.metrics as mt
 
 # to build the model

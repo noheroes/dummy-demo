@@ -8,7 +8,7 @@ import models.metrics as mt
 
 # utils
 import save_model as dm
-import libs.config_lib as cl
+import config_lib as cl
 import models.dataset as ds
 import models.features as fe
 
