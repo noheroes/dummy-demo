@@ -1,0 +1,5 @@
+{
+    "model_name": "rep",
+    "model_version": "0.0.1",
+    "algoritmo_selected": "lightgbm"
+}

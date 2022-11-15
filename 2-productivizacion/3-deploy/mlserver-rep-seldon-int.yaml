@@ -3,17 +3,17 @@ kind: SeldonDeployment
 metadata:
 #  labels:
 #    app: seldon
-  name: dummy-demo-rep
+  name: dummy-demo-rep-int
   namespace: kubeflow-user-example-com
 spec:
 #  annotations:
 #    seldon.io/istio-gateway: mesh
-  name: dummy-demo
+  name: dummy-demo-int
   predictors:
     - componentSpecs:
       - spec:
           containers:
-          - image: noheroes/mlserver-rep-scoring:latest
+          - image: noheroes/mlserver-rep-scoring-int:latest
             name: classifier
       graph:
         children: []

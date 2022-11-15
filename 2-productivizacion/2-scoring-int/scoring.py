@@ -192,7 +192,8 @@ def guardar_salida(predict, parametrosScoring) -> str:
 
 
 def convierte_dataset(data, parametrosScoring):
-    # data = json.loads(data)
+    data = json.loads(data)
+    #print(type(data))
     data = data["data"]
 
     # data = json.loads(data)
